@@ -41,7 +41,7 @@ BEGIN
                 end     		 
          close cols   
 	select @sql_command= 'UPDATE '+@table+' SET '+ Stuff(@setCol,1,2,'')+', '+@table+'.sinhro=cent.changed FROM '+@table+'  AS loc
-        INNER JOIN  OPENDATASOURCE(''SQLOLEDB'', ''Data Source=192.168.234.100;Persist Security Info=True;uid=sa;pwd=*****'').[ADB_2023].[dbo].['+@table+'] AS cent
+        INNER JOIN  OPENDATASOURCE(''SQLOLEDB'', ''Data Source=192.168.***.***;Persist Security Info=True;uid=sa;pwd=*****'').[ADB_2023].[dbo].['+@table+'] AS cent
         ON loc.ident = cent.ident AND cent.changed>=(SELECT MAX(sinhro) FROM '+@table+');'
 	deallocate cols
 

@@ -1,4 +1,4 @@
-USE [A2D2udb-Frukta-2023]
+USE [ADB_2023]
 GO
 /****** Object:  StoredProcedure [dbo].[stp_IUpdateReplikacija]    Script Date: 5/11/2023 12:43:38 PM ******/
 SET ANSI_NULLS ON
@@ -41,7 +41,7 @@ BEGIN
                 end     		 
          close cols   
 	select @sql_command= 'UPDATE '+@table+' SET '+ Stuff(@setCol,1,2,'')+', '+@table+'.sinhro=cent.changed FROM '+@table+'  AS loc
-        INNER JOIN  OPENDATASOURCE(''SQLOLEDB'', ''Data Source=192.168.234.100;Persist Security Info=True;uid=sa;pwd=Fructa2014pa$$'').[A2D2udb-Frukta-2023].[dbo].['+@table+'] AS cent
+        INNER JOIN  OPENDATASOURCE(''SQLOLEDB'', ''Data Source=192.168.234.100;Persist Security Info=True;uid=sa;pwd=*****'').[ADB_2023].[dbo].['+@table+'] AS cent
         ON loc.ident = cent.ident AND cent.changed>=(SELECT MAX(sinhro) FROM '+@table+');'
 	deallocate cols
 

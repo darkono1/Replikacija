@@ -1,4 +1,4 @@
-USE [A2D2udb-Frukta-2023]
+USE [ADB_2023]
 GO
 /****** Object:  StoredProcedure [dbo].[stp_InsertReplikacija]    Script Date: 5/11/2023 12:43:33 PM ******/
 SET ANSI_NULLS ON
@@ -44,9 +44,9 @@ BEGIN
          		 
          close cols 
 
-	select @sql_command= 'INSERT INTO ['+@local_serv_name+'].[A2D2udb-Frukta-2023].[dbo].['+@table+'] ('+@sel_statement+', sinhro)'+' select '
-	 +@sel_statement+',changed from OPENDATASOURCE(''SQLOLEDB'', ''Data Source=192.168.234.100;Persist Security Info=True;uid=sa;pwd=Fructa2014pa$$'')
-	 .[A2D2udb-Frukta-2023].[dbo].['+@table+']  cent
+	select @sql_command= 'INSERT INTO ['+@local_serv_name+'].[ADB_2023].[dbo].['+@table+'] ('+@sel_statement+', sinhro)'+' select '
+	 +@sel_statement+',changed from OPENDATASOURCE(''SQLOLEDB'', ''Data Source=192.168.***.***;Persist Security Info=True;uid=sa;pwd=*****'')
+	 .[ADB_2023].[dbo].['+@table+']  cent
 	  WHERE  NOT EXISTS(SELECT 1 FROM '+@table+' WHERE '+@table+'.ident=cent.ident) '
 	
 	deallocate cols

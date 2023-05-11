@@ -5,7 +5,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-ALTER PROCEDURE [dbo].[stp_InsertReplikacija] 
+CREATE PROCEDURE [dbo].[stp_InsertReplikacija] 
                   @table varchar(40)
 AS
 SET NOCOUNT ON

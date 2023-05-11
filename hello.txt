@@ -1,0 +1,4 @@
+tbl_Artikli 192.168.234.101
+tbl_Art_Grupa 192.168.234.101
+tbl_Artikli 192.168.234.102
+tbl_Art_Grupa 192.168.234.102

@@ -1,0 +1,52 @@
+USE [A2D2udb-Frukta-2023]
+GO
+/****** Object:  StoredProcedure [dbo].[stp_IUpdateReplikacija]    Script Date: 5/11/2023 12:43:38 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER PROCEDURE [dbo].[stp_IUpdateReplikacija] 
+                  @table varchar(40)
+AS
+SET NOCOUNT ON
+BEGIN  
+    declare @sel_statement nvarchar(max)=''
+         declare @col nvarchar(100) =''
+         declare @num_rows int =0
+         declare @dat_type nvarchar(30)
+		 declare @sql_command nvarchar(Max);
+		 declare @sql_update nvarchar(Max);
+		 declare @timestamp varbinary(8);
+		 declare @local_serv_name nvarchar(50) = @@SERVERNAME;
+	     declare @setCol nvarchar(max)='';
+
+         declare cols cursor for --kursor vadi imena kolona za tabelu 
+         select column_name, data_type 
+         from information_schema.COLUMNS
+         where TABLE_NAME = @table  --uses table fetched from tab cursor
+
+         open cols
+
+         fetch next from cols into @col, @dat_type--imena kolona tabele za upit
+         while(@@FETCH_STATUS = 0)
+                begin
+                set @num_rows +=1
+                if @dat_type != 'timestamp' and @col!='fld_Sifra' and @col!='fld_Veza' and @col!='fld_NadVeza' and @col!='fld_BarKod' and @col!='sinhro'
+                  begin   
+					  set @setCol+=' ,'+@table+'.'+@col+'= cent.'+@col 
+				  end
+                fetch next from cols into @col, @dat_type
+                if (@@FETCH_STATUS=0 AND @dat_type!='timestamp')
+                      set @sel_statement += ','
+                end     		 
+         close cols   
+	select @sql_command= 'UPDATE '+@table+' SET '+ Stuff(@setCol,1,2,'')+', '+@table+'.sinhro=cent.changed FROM '+@table+'  AS loc
+        INNER JOIN  OPENDATASOURCE(''SQLOLEDB'', ''Data Source=192.168.234.100;Persist Security Info=True;uid=sa;pwd=Fructa2014pa$$'').[A2D2udb-Frukta-2023].[dbo].['+@table+'] AS cent
+        ON loc.ident = cent.ident AND cent.changed>=(SELECT MAX(sinhro) FROM '+@table+');'
+	deallocate cols
+
+   select @sql_command 
+  
+   exec sp_executesql @sql_command
+  
+END	

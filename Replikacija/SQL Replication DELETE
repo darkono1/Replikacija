@@ -1,0 +1,21 @@
+USE [ADB_2023]
+GO
+/****** Object:  StoredProcedure [dbo].[stp_IDeleteReplikacija]    Script Date: 5/11/2023 12:43:26 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER PROCEDURE [dbo].[stp_IDeleteReplikacija] 
+         @Table nvarchar(40)
+			
+AS
+SET NOCOUNT ON
+BEGIN
+          declare @sql_command nvarchar(max)=''
+
+			   SELECT @sql_command= 'DELETE FROM '+@Table+'  WHERE NOT EXISTS(SELECT ident FROM 
+			 OPENDATASOURCE(''SQLOLEDB'', ''Data Source=192.168.***.***;Persist Security Info=True;uid=sa;pwd=****'').
+			 [ADB_2023].[dbo].['+@Table+'] c WHERE c.ident='+@Table+'.ident);'
+
+   exec sp_executesql @sql_command
+END		 

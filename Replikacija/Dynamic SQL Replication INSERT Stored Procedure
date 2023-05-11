@@ -51,12 +51,9 @@ BEGIN
 	
 	deallocate cols
    select @sql_command 
-       --
-    begin try
+ 
      exec sp_executesql @sql_command
-   end try
-   begin catch
-   end catch
+ 
 
  
    
